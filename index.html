@@ -1,126 +1,125 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+<!doctype html>
+<html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rotina Premium Pro - Mateus</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Rotina Premium Pro - Mateus</title>
 
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#ff2d2d">
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#ff2d2d" />
 
-<style>
-body{
-  margin:0;
-  font-family:Arial, sans-serif;
-  background:#0b0b0f;
-  color:white;
-}
-
-header{
-  background:linear-gradient(90deg,#1a1a1a,#300000);
-  padding:20px;
-  text-align:center;
-  font-size:22px;
-  font-weight:bold;
-  border-bottom:2px solid red;
-}
-
-.container{
-  padding:20px;
-}
-
-.card{
-  background:#14141c;
-  padding:15px;
-  margin-bottom:15px;
-  border-radius:12px;
-  border-left:5px solid red;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-button{
-  background:red;
-  border:none;
-  color:white;
-  padding:6px 10px;
-  border-radius:6px;
-  cursor:pointer;
-}
-
-.progress-bg{
-  height:10px;
-  background:#333;
-  border-radius:6px;
-  margin-top:10px;
-}
-
-.progress-fill{
-  height:10px;
-  width:0%;
-  background:red;
-  border-radius:6px;
-  transition:.3s;
-}
-</style>
+  <link rel="stylesheet" href="styles.css" />
 </head>
-
 <body>
+  <header class="top">
+    <div class="brand">
+      <div class="dot"></div>
+      <h1>Rotina Premium Pro <span class="fire">🔥</span></h1>
+    </div>
+    <div class="sub">
+      <span id="todayLabel"></span>
+      <button id="resetDayBtn" class="btn btn-ghost" title="Zerar progresso do dia">Zerar dia</button>
+    </div>
+  </header>
 
-<header>
-Rotina Premium Pro 🔥
-</header>
+  <main class="container">
+    <section class="card">
+      <div class="card-head">
+        <h2>Minha Rotina</h2>
+        <div class="actions">
+          <button id="addBtn" class="btn btn-primary">+ Adicionar</button>
+        </div>
+      </div>
 
-<div class="container">
+      <div id="list" class="list"></div>
 
-<div class="card">
-<span>🙏 Devocional 05:00</span>
-<button onclick="done()">✔</button>
-</div>
+      <div class="progress">
+        <div class="progress-head">
+          <h3>Progresso do Dia</h3>
+          <span id="progressText" class="pill">0%</span>
+        </div>
+        <div class="bar">
+          <div id="barFill" class="bar-fill"></div>
+        </div>
+        <div class="progress-foot">
+          <span id="doneText">0 concluídas</span>
+          <span id="totalText">0 tarefas</span>
+        </div>
+      </div>
+    </section>
 
-<div class="card">
-<span>💪 Treino 07:30</span>
-<button onclick="done()">✔</button>
-</div>
+    <section class="card mini">
+      <h2>Rotina do Mateus (base)</h2>
+      <p class="muted">
+        Você pode criar qualquer tarefa e salvar. Ex.: devocional, treino, projetos, cachorro, casa, apps, artes…
+      </p>
+      <div class="grid2">
+        <div class="chip">⏰ Acordar 05:00</div>
+        <div class="chip">🚌 Ônibus 06:50</div>
+        <div class="chip">💼 Trabalho 08:30–18:00</div>
+        <div class="chip">🐶 Chegou 19:39</div>
+        <div class="chip">🧹 Casa + cachorro</div>
+        <div class="chip">😴 Dormir 22:00</div>
+      </div>
+    </section>
+  </main>
 
-<div class="card">
-<span>💼 Trabalho 08:30</span>
-<button onclick="done()">✔</button>
-</div>
+  <!-- Modal -->
+  <div id="modalBackdrop" class="backdrop hidden"></div>
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <h3 id="modalTitle">Nova tarefa</h3>
+      <button id="closeModal" class="icon-btn" aria-label="Fechar">✕</button>
+    </div>
 
-<div class="card">
-<span>🐶 Limpar coco 19:45</span>
-<button onclick="done()">✔</button>
-</div>
+    <form id="taskForm" class="form">
+      <label>
+        Título
+        <input id="titleInput" maxlength="60" placeholder="Ex.: Treino em casa" required />
+      </label>
 
-<div class="card">
-<span>📱 Projetos 21:00</span>
-<button onclick="done()">✔</button>
-</div>
+      <div class="row">
+        <label>
+          Hora
+          <input id="timeInput" type="time" required />
+        </label>
 
-<h3>Progresso do Dia</h3>
-<div class="progress-bg">
-<div class="progress-fill" id="bar"></div>
-</div>
+        <label>
+          Emoji (opcional)
+          <input id="emojiInput" maxlength="2" placeholder="🔥" />
+        </label>
+      </div>
 
-</div>
+      <label>
+        Categoria
+        <select id="catInput">
+          <option value="Saúde">Saúde</option>
+          <option value="Trabalho">Trabalho</option>
+          <option value="Casa">Casa</option>
+          <option value="Cachorro">Cachorro</option>
+          <option value="Projetos">Projetos</option>
+          <option value="Fé">Fé</option>
+          <option value="Outros" selected>Outros</option>
+        </select>
+      </label>
 
-<script>
-let progress = 0;
+      <label>
+        Observação (opcional)
+        <textarea id="noteInput" rows="3" maxlength="180" placeholder="Ex.: treino curto + alongamento"></textarea>
+      </label>
 
-function done(){
-  if(progress < 100){
-    progress += 20;
-    document.getElementById("bar").style.width = progress + "%";
-  }
-}
+      <div class="row row-end">
+        <button id="deleteBtn" type="button" class="btn btn-danger hidden">Excluir</button>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+      </div>
+    </form>
+  </div>
 
-// registrar service worker
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('service-worker.js');
-}
-</script>
-
+  <script src="main.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("./service-worker.js").catch(()=>{});
+    }
+  </script>
 </body>
 </html>
